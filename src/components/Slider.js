@@ -13,36 +13,55 @@ class Slider extends React.Component {
     onTransition: false
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.index !== prevProps.index) {
+      this.updatePos(this.props.index);
+    }
+  }
+
+  updatePos = index => {
+    this.setState({ pos: index * -100, posY: index * -100 });
+  };
+
+  calculatePercentage(numerator, denominator) {
+    return (numerator / denominator) * 100;
+  }
+
   handleSwiping = data => {
-    const percentageDeltaY = (data.deltaY / this.swipeable.clientHeight) * 100;
+    if (this.props.index === 0 && data.dir === 'Down') {
+      return;
+    }
+
+    const percentageDeltaY = this.calculatePercentage(
+      data.deltaY,
+      this.swipeable.clientHeight
+    );
     console.log('swiping', data);
     this.setState(state => ({ posY: state.pos - percentageDeltaY }));
   };
 
   handleSwiped = data => {
     const { velocity, dir } = data;
+    if (this.props.index === 0 && dir === 'Down') {
+      return;
+    }
+
     this.setState(state => {
       const newState = { onTransition: true };
-      if (velocity > 0.5) {
+      const percentageDeltaY = this.calculatePercentage(
+        data.absY,
+        this.swipeable.clientHeight
+      );
+      if (velocity > 0.5 || percentageDeltaY > 50) {
         console.log('swiped', dir);
+
         if (dir === 'Up') {
-          const pos = state.pos - 100;
-          return {
-            ...newState,
-            pos,
-            posY: pos
-          };
+          this.props.onChangeIndex(1);
         } else if (dir === 'Down') {
-          const pos = state.pos + 100;
-          return {
-            ...newState,
-            pos,
-            posY: pos
-          };
+          this.props.onChangeIndex(-1);
         }
-      } else {
-        return { ...newState, posY: state.pos };
       }
+      return { ...newState, posY: state.pos };
     });
   };
 
@@ -87,5 +106,10 @@ class Slider extends React.Component {
     );
   }
 }
+
+Slider.defaultProps = {
+  index: 0,
+  onChangeIndex: () => null
+};
 
 export default Slider;

@@ -5,6 +5,14 @@ import './App.css';
 import Slider from '../components/Slider';
 
 class App extends Component {
+  state = {
+    index: 0
+  };
+
+  handleChange = delta => {
+    this.setState(state => ({ index: state.index + delta }));
+  };
+
   render() {
     return (
       <div className="App">
@@ -13,7 +21,7 @@ class App extends Component {
           <p>
             Edit <code>src/App.js</code> and save to reload.
           </p>
-          <Slider />
+          <Slider index={this.state.index} onChangeIndex={this.handleChange} />
           <a
             className="App-link"
             href="https://reactjs.org"
