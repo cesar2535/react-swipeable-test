@@ -2,10 +2,6 @@ import React from 'react';
 import { Swipeable } from 'react-swipeable';
 import styles from './Slider.module.scss';
 
-import Card from './Card';
-
-const data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-
 class Slider extends React.Component {
   state = {
     pos: 0,
@@ -70,10 +66,6 @@ class Slider extends React.Component {
     this.props.onTransitionEnd();
   };
 
-  renderItem = (val, idx) => {
-    return <Card key={idx} id={idx} />;
-  };
-
   render() {
     const { posY, onTransition } = this.state;
     let style = {};
@@ -89,6 +81,8 @@ class Slider extends React.Component {
       };
     }
 
+    const children = React.Children.toArray(this.props.children);
+
     return (
       <Swipeable
         innerRef={ref => (this.swipeable = ref)}
@@ -101,7 +95,7 @@ class Slider extends React.Component {
           style={style}
           onTransitionEnd={this.handleTransitionEnd}
         >
-          {this.props.children}
+          {children}
         </div>
       </Swipeable>
     );
