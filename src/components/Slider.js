@@ -9,14 +9,46 @@ class Slider extends React.Component {
   state = {
     pos: 0,
     posY: 0,
+    indexStart: 2,
+    indexEnd: 3,
     onTransition: false
   };
+
+  componentDidMount() {}
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.index !== prevProps.index) {
       this.updatePosition(this.props.index);
     }
   }
+
+  getBoundingStart = () => {
+    const { index } = this.props;
+    const { indexStart } = this.state;
+    let start = indexStart;
+
+    while (start > index) {
+      start = start - 1;
+    }
+
+    return start;
+  };
+
+  getBoundingEnd = () => {
+    const { index, children } = this.props;
+    const { indexEnd } = this.state;
+    const len = React.Children.count(children);
+    let end = indexEnd;
+
+    while (index + end > len) {
+      const idx = len - index - end;
+      if (idx < 0) {
+        end--;
+      }
+    }
+
+    return end;
+  };
 
   updatePosition = index => {
     this.setState({ pos: index * -100, posY: index * -100 });
@@ -81,6 +113,11 @@ class Slider extends React.Component {
     }
 
     const children = React.Children.toArray(this.props.children);
+    const start = this.props.index - this.getBoundingStart();
+    const end = this.props.index + this.getBoundingEnd();
+    const list = children.slice(start, end);
+    console.log(this.props.index);
+    console.log(start, end);
 
     return (
       <Swipeable
@@ -94,7 +131,7 @@ class Slider extends React.Component {
           style={style}
           onTransitionEnd={this.handleTransitionEnd}
         >
-          {children}
+          {list}
         </div>
       </Swipeable>
     );
