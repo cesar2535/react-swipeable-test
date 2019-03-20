@@ -61,7 +61,7 @@ class Slider extends React.Component {
     if (onTransition) {
       style = {
         transform: `translate(0, ${posY}%)`,
-        transition: `transform 0.3s ease`
+        transition: `transform 0.3s cubic-bezier(0.15, 0.3, 0.25, 1)`
       };
     } else {
       style = {
