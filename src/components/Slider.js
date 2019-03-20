@@ -2,6 +2,9 @@ import React from 'react';
 import { Swipeable } from 'react-swipeable';
 import styles from './Slider.module.scss';
 
+const calculatePercentage = (numerator, denominator) =>
+  (numerator / denominator) * 100;
+
 class Slider extends React.Component {
   state = {
     pos: 0,
@@ -19,16 +22,12 @@ class Slider extends React.Component {
     this.setState({ pos: index * -100, posY: index * -100 });
   };
 
-  calculatePercentage(numerator, denominator) {
-    return (numerator / denominator) * 100;
-  }
-
   handleSwiping = data => {
     if (this.props.index === 0 && data.dir === 'Down') {
       return;
     }
 
-    const percentageDeltaY = this.calculatePercentage(
+    const percentageDeltaY = calculatePercentage(
       data.deltaY,
       this.swipeable.clientHeight
     );
@@ -44,7 +43,7 @@ class Slider extends React.Component {
 
     this.setState(state => {
       const newState = { onTransition: true };
-      const percentageDeltaY = this.calculatePercentage(
+      const percentageDeltaY = calculatePercentage(
         data.absY,
         this.swipeable.clientHeight
       );
