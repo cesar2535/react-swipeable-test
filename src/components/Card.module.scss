@@ -2,7 +2,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 1px solid #f9cbda;
   width: 100%;
   height: 100%;
   background-color: rgba(134, 110, 199, 0.5);
+  box-sizing: border-box;
 }
