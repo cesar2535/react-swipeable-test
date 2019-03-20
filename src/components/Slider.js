@@ -41,10 +41,7 @@ class Slider extends React.Component {
     let end = indexEnd;
 
     while (index + end > len) {
-      const idx = len - index - end;
-      if (idx < 0) {
-        end--;
-      }
+      end--;
     }
 
     return end;
