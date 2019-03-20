@@ -15,11 +15,11 @@ class Slider extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.index !== prevProps.index) {
-      this.updatePos(this.props.index);
+      this.updatePosition(this.props.index);
     }
   }
 
-  updatePos = index => {
+  updatePosition = index => {
     this.setState({ pos: index * -100, posY: index * -100 });
   };
 
@@ -67,6 +67,7 @@ class Slider extends React.Component {
 
   handleTransitionEnd = () => {
     this.setState({ onTransition: false });
+    this.props.onTransitionEnd();
   };
 
   renderItem = (val, idx) => {
@@ -100,7 +101,7 @@ class Slider extends React.Component {
           style={style}
           onTransitionEnd={this.handleTransitionEnd}
         >
-          {data.map(this.renderItem)}
+          {this.props.children}
         </div>
       </Swipeable>
     );
@@ -109,7 +110,8 @@ class Slider extends React.Component {
 
 Slider.defaultProps = {
   index: 0,
-  onChangeIndex: () => null
+  onChangeIndex: () => null,
+  onTransitionEnd: () => null
 };
 
 export default Slider;
