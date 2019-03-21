@@ -5,14 +5,52 @@ import styles from './Slider.module.scss';
 const calculatePercentage = (numerator, denominator) =>
   (numerator / denominator) * 100;
 
+const getBoundingStart = props => {
+  const { index, before } = props;
+  let start = before;
+
+  while (start > index) {
+    start = start - 1;
+  }
+
+  return start;
+};
+
+const getBoundingEnd = props => {
+  const { index, after, children } = props;
+  const len = React.Children.count(children);
+  let end = after;
+
+  while (index + end > len) {
+    end--;
+  }
+
+  return end;
+};
+
 class Slider extends React.Component {
   state = {
     pos: 0,
     posY: 0,
-    indexStart: 2,
-    indexEnd: 3,
+    beforeLen: 2,
+    afterLen: 3,
     onTransition: false
   };
+
+  // これは static method のため、メソッド内で this.props.hoge !== nextProps.hoge のような比較処理は行えません。
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const beforeLen = getBoundingStart(nextProps);
+    const afterLen = getBoundingEnd(nextProps);
+
+    if (prevState.beforeLen !== beforeLen || prevState.afterLen !== afterLen) {
+      return {
+        beforeLen,
+        afterLen
+      };
+    }
+
+    return null;
+  }
 
   componentDidMount() {}
 
@@ -21,31 +59,6 @@ class Slider extends React.Component {
       this.updatePosition(this.props.index);
     }
   }
-
-  getBoundingStart = () => {
-    const { index } = this.props;
-    const { indexStart } = this.state;
-    let start = indexStart;
-
-    while (start > index) {
-      start = start - 1;
-    }
-
-    return start;
-  };
-
-  getBoundingEnd = () => {
-    const { index, children } = this.props;
-    const { indexEnd } = this.state;
-    const len = React.Children.count(children);
-    let end = indexEnd;
-
-    while (index + end > len) {
-      end--;
-    }
-
-    return end;
-  };
 
   updatePosition = index => {
     this.setState({ pos: index * -100, posY: index * -100 });
@@ -95,7 +108,7 @@ class Slider extends React.Component {
   };
 
   render() {
-    const { posY, onTransition } = this.state;
+    const { posY, onTransition, beforeLen, afterLen } = this.state;
     let style = {};
 
     if (onTransition) {
@@ -110,8 +123,8 @@ class Slider extends React.Component {
     }
 
     const children = React.Children.toArray(this.props.children);
-    const start = this.props.index - this.getBoundingStart();
-    const end = this.props.index + this.getBoundingEnd();
+    const start = this.props.index - beforeLen;
+    const end = this.props.index + afterLen;
     const list = children.slice(start, end);
     console.log(this.props.index);
     console.log(start, end);
@@ -137,6 +150,8 @@ class Slider extends React.Component {
 
 Slider.defaultProps = {
   index: 0,
+  before: 2,
+  after: 3,
   onChangeIndex: () => null,
   onTransitionEnd: () => null
 };
