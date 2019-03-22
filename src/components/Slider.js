@@ -104,14 +104,14 @@ class Slider extends React.Component {
   handleSwiped = data => {
     const { velocity, dir } = data;
     if (this.state.index === 0 && dir === 'Down') {
-      return;
+      return this.setState(state => ({ posY: state.pos }));
     }
 
     if (
       this.state.index === this.state.indexEnd - this.state.indexStart - 1 &&
       dir === 'Up'
     ) {
-      return;
+      return this.setState(state => ({ posY: state.pos }));
     }
 
     this.setState(state => {
