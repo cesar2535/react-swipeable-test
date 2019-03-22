@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 import Card from '../components/Card';
@@ -25,9 +24,8 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
           <p>
-            Edit <code>src/App.js</code> and save to reload.
+            Use <span>react-swipeable</span> build the recycle slider
           </p>
           <Slider index={this.state.index} onChangeIndex={this.handleChange}>
             {data.map(this.renderCard)}
