@@ -40,13 +40,15 @@ class Slider extends React.Component {
 
   // これは static method のため、メソッド内で this.props.hoge !== nextProps.hoge のような比較処理は行えません。
   static getDerivedStateFromProps(nextProps, prevState) {
-    const nextState = Object.assign({}, prevState);
     const beforeLen = getBoundingStart(nextProps);
     const afterLen = getBoundingEnd(nextProps);
     const indexStart = nextProps.index - beforeLen;
     const indexEnd = nextProps.index + afterLen;
 
-    console.log(nextState);
+    console.log('getDerived indexStart', indexStart);
+    console.log('getDerived indexEnd', indexEnd);
+    console.log('getDerived propsIdx', nextProps.index);
+    console.log('getDerived stateId', prevState.index);
     if (
       prevState.indexStart !== indexStart ||
       prevState.indexEnd !== indexEnd
@@ -63,6 +65,12 @@ class Slider extends React.Component {
   componentDidMount() {}
 
   componentDidUpdate(prevProps, prevState) {
+    if (this.props.index !== prevProps.index) {
+      const { indexStart } = this.state;
+      const nextStateIdx = this.props.index - indexStart;
+      this.setState({ index: nextStateIdx });
+    }
+
     if (this.state.index !== prevState.index) {
       console.log('update position', this.state.index);
       this.updatePosition(this.state.index);
