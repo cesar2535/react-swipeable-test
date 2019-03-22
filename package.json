@@ -1,7 +1,7 @@
 {
   "name": "swipeable-test",
   "description": "Swipeable test with React",
-  "homepage": "https://cesar2535.github.io/swipeable-test",
+  "homepage": "https://cesar2535.github.io/react-swipeable-test",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
