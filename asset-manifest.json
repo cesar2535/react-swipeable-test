@@ -1,13 +1,13 @@
 {
-  "main.css": "/static/css/main.e54e83cb.chunk.css",
-  "main.js": "/static/js/main.809592c9.chunk.js",
-  "main.js.map": "/static/js/main.809592c9.chunk.js.map",
-  "runtime~main.js": "/static/js/runtime~main.c5541365.js",
-  "runtime~main.js.map": "/static/js/runtime~main.c5541365.js.map",
-  "static/js/2.bd6f1ee0.chunk.js": "/static/js/2.bd6f1ee0.chunk.js",
-  "static/js/2.bd6f1ee0.chunk.js.map": "/static/js/2.bd6f1ee0.chunk.js.map",
-  "index.html": "/index.html",
-  "precache-manifest.aaf8334e332630ccf7600c1471dfd2a0.js": "/precache-manifest.aaf8334e332630ccf7600c1471dfd2a0.js",
-  "service-worker.js": "/service-worker.js",
-  "static/css/main.e54e83cb.chunk.css.map": "/static/css/main.e54e83cb.chunk.css.map"
+  "main.css": "/react-swipeable-test/static/css/main.e54e83cb.chunk.css",
+  "main.js": "/react-swipeable-test/static/js/main.67ab550f.chunk.js",
+  "main.js.map": "/react-swipeable-test/static/js/main.67ab550f.chunk.js.map",
+  "runtime~main.js": "/react-swipeable-test/static/js/runtime~main.3a1b6063.js",
+  "runtime~main.js.map": "/react-swipeable-test/static/js/runtime~main.3a1b6063.js.map",
+  "static/js/2.bd6f1ee0.chunk.js": "/react-swipeable-test/static/js/2.bd6f1ee0.chunk.js",
+  "static/js/2.bd6f1ee0.chunk.js.map": "/react-swipeable-test/static/js/2.bd6f1ee0.chunk.js.map",
+  "index.html": "/react-swipeable-test/index.html",
+  "precache-manifest.22429594886ecf41ad5d29a169cb3b9e.js": "/react-swipeable-test/precache-manifest.22429594886ecf41ad5d29a169cb3b9e.js",
+  "service-worker.js": "/react-swipeable-test/service-worker.js",
+  "static/css/main.e54e83cb.chunk.css.map": "/react-swipeable-test/static/css/main.e54e83cb.chunk.css.map"
 }
