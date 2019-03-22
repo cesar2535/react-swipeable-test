@@ -86,6 +86,13 @@ class Slider extends React.Component {
       return;
     }
 
+    if (
+      this.state.index === this.state.indexEnd - this.state.indexStart - 1 &&
+      data.dir === 'Up'
+    ) {
+      return;
+    }
+
     const percentageDeltaY = calculatePercentage(
       data.deltaY,
       this.swipeable.clientHeight
@@ -97,6 +104,13 @@ class Slider extends React.Component {
   handleSwiped = data => {
     const { velocity, dir } = data;
     if (this.state.index === 0 && dir === 'Down') {
+      return;
+    }
+
+    if (
+      this.state.index === this.state.indexEnd - this.state.indexStart - 1 &&
+      dir === 'Up'
+    ) {
       return;
     }
 
