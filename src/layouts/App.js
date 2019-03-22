@@ -12,8 +12,9 @@ class App extends Component {
     index: 0
   };
 
-  handleChange = delta => {
-    this.setState(state => ({ index: state.index + delta }));
+  handleChange = nextIdx => {
+    console.log('onChangeIndex', nextIdx);
+    this.setState(state => ({ index: nextIdx }));
   };
 
   renderCard = (val, idx) => {
