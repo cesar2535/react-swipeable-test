@@ -1,5 +1,19 @@
 import React from 'react';
 import { Swipeable } from 'react-swipeable';
+import {
+  cond,
+  propEq,
+  inc,
+  dec,
+  identity,
+  always,
+  T,
+  evolve,
+  anyPass,
+  ifElse,
+  assoc,
+  compose
+} from 'ramda';
 import styles from './Slider.module.scss';
 
 const calculatePercentage = (numerator, denominator) =>
@@ -34,6 +48,18 @@ const getChildrenBounding = props => {
   return [start, end];
 };
 
+const isVelocityPass = ({ velocity }) => velocity > 0.5;
+const isHeightPass = ({ percentageDeltaY }) => percentageDeltaY > 50;
+const setPosYFromPos = state => assoc('posY', state.pos, state);
+const getIndexTransformer = ifElse(
+  anyPass([isVelocityPass, isHeightPass]),
+  cond([
+    [propEq('dir', 'Up'), always(inc)],
+    [propEq('dir', 'Down'), always(dec)],
+    [T, always(identity)]
+  ]),
+  always(identity)
+);
 class Slider extends React.Component {
   state = {
     pos: 0,
@@ -102,7 +128,7 @@ class Slider extends React.Component {
   };
 
   handleSwiped = data => {
-    const { velocity, dir } = data;
+    const { dir } = data;
     this.props.onSwitching(false);
 
     if (this.state.index === 0 && dir === 'Down') {
@@ -116,22 +142,24 @@ class Slider extends React.Component {
       return this.setState(state => ({ posY: state.pos }));
     }
 
-    this.setState(state => {
-      let nextIdx = state.index;
-      const newState = { onTransition: true };
-      const percentageDeltaY = calculatePercentage(
-        data.absY,
-        this.swipeable.clientHeight
-      );
-      if (velocity > 0.5 || percentageDeltaY > 50) {
-        if (dir === 'Up') {
-          nextIdx = state.index + 1;
-        } else if (dir === 'Down') {
-          nextIdx = state.index - 1;
-        }
-      }
-      return { ...newState, posY: state.pos, index: nextIdx };
+    const percentageDeltaY = calculatePercentage(
+      data.absY,
+      this.swipeable.clientHeight
+    );
+
+    const transformer = getIndexTransformer({ ...data, percentageDeltaY });
+
+    const transform = evolve({
+      index: transformer,
+      onTransition: T
     });
+
+    const setNextState = compose(
+      setPosYFromPos,
+      transform
+    );
+
+    this.setState(setNextState);
   };
 
   handleTransitionEnd = () => {
