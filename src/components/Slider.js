@@ -28,6 +28,12 @@ const getBoundingEnd = props => {
   return end;
 };
 
+const getChildrenBounding = props => {
+  const start = getBoundingStart(props);
+  const end = getBoundingEnd(props);
+  return [start, end];
+};
+
 class Slider extends React.Component {
   state = {
     pos: 0,
@@ -40,15 +46,10 @@ class Slider extends React.Component {
 
   // これは static method のため、メソッド内で this.props.hoge !== nextProps.hoge のような比較処理は行えません。
   static getDerivedStateFromProps(nextProps, prevState) {
-    const beforeLen = getBoundingStart(nextProps);
-    const afterLen = getBoundingEnd(nextProps);
+    const [beforeLen, afterLen] = getChildrenBounding(nextProps);
     const indexStart = nextProps.index - beforeLen;
     const indexEnd = nextProps.index + afterLen;
 
-    console.log('getDerived indexStart', indexStart);
-    console.log('getDerived indexEnd', indexEnd);
-    console.log('getDerived propsIdx', nextProps.index);
-    console.log('getDerived stateId', prevState.index);
     if (
       prevState.indexStart !== indexStart ||
       prevState.indexEnd !== indexEnd
@@ -72,7 +73,6 @@ class Slider extends React.Component {
     }
 
     if (this.state.index !== prevState.index) {
-      console.log('update position', this.state.index);
       this.updatePosition(this.state.index);
     }
   }
@@ -122,8 +122,6 @@ class Slider extends React.Component {
         this.swipeable.clientHeight
       );
       if (velocity > 0.5 || percentageDeltaY > 50) {
-        console.log('swiped', dir);
-
         if (dir === 'Up') {
           nextIdx = state.index + 1;
         } else if (dir === 'Down') {
@@ -136,33 +134,30 @@ class Slider extends React.Component {
 
   handleTransitionEnd = () => {
     const { index, indexStart } = this.state;
-    console.log('onTransitionEnd propsIndex', this.props.index);
-    console.log('onTransitionEnd indexStart', indexStart);
-    console.log('onTransitionEnd stateIndex', index);
     this.setState({ onTransition: false });
     this.props.onTransitionEnd();
     this.props.onChangeIndex(indexStart + index);
   };
 
-  render() {
-    const { posY, onTransition, indexStart, indexEnd } = this.state;
-    let style = {};
+  getContainerStyle(posY, hasTransition = false) {
+    const transform = `translate(0, ${posY}%)`;
 
-    if (onTransition) {
-      style = {
-        transform: `translate(0, ${posY}%)`,
+    if (hasTransition) {
+      return {
+        transform,
         transition: `transform 0.3s cubic-bezier(0.15, 0.3, 0.25, 1)`
-      };
-    } else {
-      style = {
-        transform: `translate(0, ${posY}%)`
       };
     }
 
+    return { transform };
+  }
+
+  render() {
+    const { posY, onTransition, indexStart, indexEnd } = this.state;
+    const style = this.getContainerStyle(posY, onTransition);
+
     const children = React.Children.toArray(this.props.children);
     const list = children.slice(indexStart, indexEnd);
-    console.log('props index @render', this.props.index);
-    console.log(indexStart, indexEnd);
 
     return (
       <Swipeable
