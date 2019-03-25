@@ -89,11 +89,13 @@ class Slider extends React.PureComponent {
     return null;
   }
 
+  componentDidMount() {
+    this.setIndex(this.props.index);
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (this.props.index !== prevProps.index) {
-      const { indexStart } = this.state;
-      const nextStateIdx = this.props.index - indexStart;
-      this.setState({ index: nextStateIdx });
+      this.setIndex(this.props.index);
     }
 
     if (this.state.index !== prevState.index) {
@@ -104,6 +106,12 @@ class Slider extends React.PureComponent {
   updatePosition = index => {
     this.setState({ pos: index * -100, posY: index * -100 });
   };
+
+  setIndex(index) {
+    this.setState(state => ({
+      index: index - state.indexStart
+    }));
+  }
 
   handleSwiping = data => {
     this.props.onSwitching(true);
