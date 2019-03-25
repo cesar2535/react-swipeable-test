@@ -63,8 +63,6 @@ class Slider extends React.Component {
     return null;
   }
 
-  componentDidMount() {}
-
   componentDidUpdate(prevProps, prevState) {
     if (this.props.index !== prevProps.index) {
       const { indexStart } = this.state;
