@@ -60,7 +60,7 @@ const getIndexTransformer = ifElse(
   ]),
   always(identity)
 );
-class Slider extends React.Component {
+class Slider extends React.PureComponent {
   state = {
     pos: 0,
     posY: 0,
