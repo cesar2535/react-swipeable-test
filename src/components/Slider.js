@@ -80,6 +80,8 @@ class Slider extends React.Component {
   };
 
   handleSwiping = data => {
+    this.props.onSwitching(true);
+
     if (this.state.index === 0 && data.dir === 'Down') {
       return;
     }
@@ -101,6 +103,8 @@ class Slider extends React.Component {
 
   handleSwiped = data => {
     const { velocity, dir } = data;
+    this.props.onSwitching(false);
+
     if (this.state.index === 0 && dir === 'Down') {
       return this.setState(state => ({ posY: state.pos }));
     }
@@ -180,6 +184,7 @@ Slider.defaultProps = {
   index: 0,
   before: 2,
   after: 3,
+  onSwitching: () => null,
   onChangeIndex: () => null,
   onTransitionEnd: () => null
 };
